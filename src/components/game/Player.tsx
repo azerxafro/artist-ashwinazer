@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useMemo } from 'react';
+import React, { useRef, useEffect, useMemo, useCallback } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useGameStore } from './store';
 import * as THREE from 'three';
@@ -109,47 +109,64 @@ const Player: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isPlaying, gameOver, moveLeft, moveRight, startGame]);
 
-  // Touch / Swipe controls for mobile
+  // Touch / Swipe controls — attached to .legends-game container, not window
   useEffect(() => {
     let startX = 0;
     let startY = 0;
+    let startTime = 0;
 
-    const handleTouchStart = (e: TouchEvent) => {
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
+    const gameContainer = document.querySelector('.legends-game');
+    if (!gameContainer) return;
+
+    const handleTouchStart = (e: Event) => {
+      const te = e as TouchEvent;
+      // Don't interfere with UI buttons
+      const target = te.target as HTMLElement;
+      if (target.closest('button, a, .game-premiere-controls')) return;
+
+      startX = te.touches[0].clientX;
+      startY = te.touches[0].clientY;
+      startTime = Date.now();
     };
 
-    const handleTouchEnd = (e: TouchEvent) => {
-      const endX = e.changedTouches[0].clientX;
-      const endY = e.changedTouches[0].clientY;
+    const handleTouchEnd = (e: Event) => {
+      const te = e as TouchEvent;
+      const target = te.target as HTMLElement;
+      // Don't interfere with UI buttons
+      if (target.closest('button, a, .game-premiere-controls')) return;
+
+      const endX = te.changedTouches[0].clientX;
+      const endY = te.changedTouches[0].clientY;
       const dx = endX - startX;
       const dy = endY - startY;
+      const elapsed = Date.now() - startTime;
 
-      // Only register horizontal swipes (not vertical scrolls)
-      if (Math.abs(dx) < 30 || Math.abs(dx) < Math.abs(dy)) {
-        // If it's a tap (small movement), start the game
-        if (Math.abs(dx) < 10 && Math.abs(dy) < 10) {
-          if (!useGameStore.getState().isPlaying && !useGameStore.getState().gameOver) {
-            useGameStore.getState().startGame();
-          }
+      const state = useGameStore.getState();
+
+      // Tap detection: small movement + short duration
+      if (Math.abs(dx) < 20 && Math.abs(dy) < 20 && elapsed < 300) {
+        if (!state.isPlaying && !state.gameOver) {
+          state.startGame();
         }
         return;
       }
 
-      if (!useGameStore.getState().isPlaying) return;
-
-      if (dx > 0) {
-        useGameStore.getState().moveRight();
-      } else {
-        useGameStore.getState().moveLeft();
+      // Swipe detection: enough horizontal distance and more horizontal than vertical
+      if (Math.abs(dx) > 30 && Math.abs(dx) > Math.abs(dy)) {
+        if (!state.isPlaying) return;
+        if (dx > 0) {
+          state.moveRight();
+        } else {
+          state.moveLeft();
+        }
       }
     };
 
-    window.addEventListener('touchstart', handleTouchStart, { passive: true });
-    window.addEventListener('touchend', handleTouchEnd, { passive: true });
+    gameContainer.addEventListener('touchstart', handleTouchStart, { passive: true });
+    gameContainer.addEventListener('touchend', handleTouchEnd, { passive: true });
     return () => {
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchend', handleTouchEnd);
+      gameContainer.removeEventListener('touchstart', handleTouchStart);
+      gameContainer.removeEventListener('touchend', handleTouchEnd);
     };
   }, []);
 
@@ -165,7 +182,6 @@ const Player: React.FC = () => {
           position={[0, -0.3, 3 + i * SEGMENT_SPACING]}
         >
           {i === 0 ? (
-            // Head: slightly elongated capsule shape
             <capsuleGeometry args={[SEGMENT_RADIUS * 1.2, SEGMENT_RADIUS * 0.8, 6, 12]} />
           ) : (
             <sphereGeometry args={[SEGMENT_RADIUS * (1 - i * 0.08), 12, 12]} />
@@ -178,7 +194,7 @@ const Player: React.FC = () => {
         </mesh>
       ))}
 
-      {/* Eyes on the head (two small white spheres) */}
+      {/* Eyes on the head */}
       <mesh position={[-0.12, -0.15, 2.78]}>
         <sphereGeometry args={[0.06, 8, 8]} />
         <meshStandardMaterial color="#fff" emissive="#fff" emissiveIntensity={0.8} />

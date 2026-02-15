@@ -4,8 +4,7 @@ import { useGameStore } from './store';
 import * as THREE from 'three';
 
 /** Floating particles along the track */
-const TrackParticles: React.FC = () => {
-  const count = 200;
+const TrackParticles: React.FC<{ count: number }> = ({ count }) => {
   const { phase, speed, isPlaying } = useGameStore();
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const dummy = useMemo(() => new THREE.Object3D(), []);
@@ -18,7 +17,7 @@ const TrackParticles: React.FC = () => {
       speed: 0.3 + Math.random() * 0.7,
       scale: 0.02 + Math.random() * 0.06,
     }));
-  }, []);
+  }, [count]);
 
   useFrame((_, delta) => {
     if (!meshRef.current) return;
@@ -43,7 +42,7 @@ const TrackParticles: React.FC = () => {
 
   return (
     <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
-      <sphereGeometry args={[1, 6, 6]} />
+      <sphereGeometry args={[1, 4, 4]} />
       <meshBasicMaterial color={color} transparent opacity={0.4} />
     </instancedMesh>
   );
@@ -85,7 +84,7 @@ const LaneMarkers: React.FC = () => {
   );
 };
 
-const World: React.FC = () => {
+const World: React.FC<{ isMobile?: boolean }> = ({ isMobile = false }) => {
   const { speed, phase } = useGameStore();
   const gridRef = useRef<THREE.GridHelper>(null);
 
@@ -99,13 +98,14 @@ const World: React.FC = () => {
   });
 
   const color = phase === 'legend' ? '#D4AF37' : '#ff0055';
+  const particleCount = isMobile ? 60 : 200;
 
   return (
     <group>
       {/* Subtle Grid */}
       <gridHelper
         ref={gridRef}
-        args={[200, 80, `${color}20`, '#111111']}
+        args={[200, isMobile ? 40 : 80, `${color}20`, '#111111']}
         position={[0, -2, 0]}
       />
 
@@ -115,16 +115,20 @@ const World: React.FC = () => {
       {/* Lane markers */}
       <LaneMarkers />
 
-      {/* Atmospheric particles */}
-      <TrackParticles />
+      {/* Atmospheric particles — reduced on mobile */}
+      <TrackParticles count={particleCount} />
 
       {/* Fog */}
       <fog attach="fog" args={['#000000', 8, 55]} />
 
-      {/* Atmospheric lighting */}
+      {/* Atmospheric lighting — fewer on mobile */}
       <pointLight position={[0, 5, -30]} color={color} intensity={2} distance={60} />
-      <pointLight position={[-10, 3, -15]} color={color} intensity={0.5} distance={30} />
-      <pointLight position={[10, 3, -15]} color={color} intensity={0.5} distance={30} />
+      {!isMobile && (
+        <>
+          <pointLight position={[-10, 3, -15]} color={color} intensity={0.5} distance={30} />
+          <pointLight position={[10, 3, -15]} color={color} intensity={0.5} distance={30} />
+        </>
+      )}
     </group>
   );
 };

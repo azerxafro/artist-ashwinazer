@@ -84,6 +84,9 @@
   text-transform: uppercase;
   transition: background 0.3s;
   letter-spacing: 0.1em;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
 }
 @media (min-width: 768px) {
   .game-phase-btn {
@@ -192,9 +195,14 @@
   cursor: pointer;
   font-size: 0.75rem;
   transition: transform 0.3s;
+  min-height: 44px;
+  min-width: 120px;
 }
 .game-retry-btn:hover {
   transform: scale(1.1);
+}
+.game-retry-btn:active {
+  transform: scale(0.95);
 }
 
 /* ── Premiere Controls ── */
@@ -238,6 +246,7 @@
   border: 1px solid rgba(255, 255, 255, 0.3);
   background: transparent;
   color: #fff;
+  min-height: 44px;
 }
 @media (min-width: 768px) {
   .game-premiere-btn {
