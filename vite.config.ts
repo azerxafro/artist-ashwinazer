@@ -17,8 +17,10 @@ export default defineConfig({
           vendor: ['react', 'react-dom', 'react-helmet-async'],
           framer: ['framer-motion'],
           icons: ['lucide-react'],
+          'three-vendor': ['three', '@react-three/fiber', '@react-three/drei', '@react-three/postprocessing'],
         },
       },
     },
+    chunkSizeWarningLimit: 1200,
   },
 });
