@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useGameStore } from './store';
+import { sfxCollect, sfxDodge, sfxGameOver } from './sfx';
 import * as THREE from 'three';
 
 const LANE_WIDTH = 2;
@@ -92,7 +93,7 @@ const Obstacle: React.FC<{ position: [number, number, number]; phase: string }> 
 };
 
 const ObstaclesManager: React.FC = () => {
-  const { speed, isPlaying, gameOver, lane: playerLane, endGame, incrementScore, phase } = useGameStore();
+  const { speed, isPlaying, gameOver, lane: playerLane, endGame, incrementScore, phase, isPremierePlaying } = useGameStore();
   const [obstacles, setObstacles] = useState<ObstacleData[]>([]);
   const lastSpawnTime = useRef(0);
 
@@ -129,8 +130,10 @@ const ObstaclesManager: React.FC = () => {
         if (obs.z > 2.5 && obs.z < 3.5) {
           if (obs.lane === playerLane) {
             if (obs.type === 'obstacle') {
+              if (!isPremierePlaying) sfxGameOver();
               endGame();
             } else {
+              if (!isPremierePlaying) sfxCollect();
               incrementScore(100);
               return;
             }
@@ -140,7 +143,10 @@ const ObstaclesManager: React.FC = () => {
         if (obs.z < 10) {
           next.push(obs);
         } else {
-          if (obs.type === 'obstacle') incrementScore(10);
+          if (obs.type === 'obstacle') {
+            if (!isPremierePlaying) sfxDodge();
+            incrementScore(10);
+          }
         }
       });
 
@@ -161,3 +167,4 @@ const ObstaclesManager: React.FC = () => {
 };
 
 export default ObstaclesManager;
+

@@ -1,6 +1,7 @@
-import React, { useRef, useEffect, useMemo, useCallback } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useGameStore } from './store';
+import { sfxSwitch, sfxStart } from './sfx';
 import * as THREE from 'three';
 
 const LANE_WIDTH = 2;
@@ -9,7 +10,7 @@ const SEGMENT_SPACING = 0.45;
 const SEGMENT_RADIUS = 0.22;
 
 const Player: React.FC = () => {
-  const { lane, phase, isPlaying, gameOver, moveLeft, moveRight, startGame } = useGameStore();
+  const { lane, phase, isPlaying, gameOver, moveLeft, moveRight, startGame, isPremierePlaying } = useGameStore();
   const groupRef = useRef<THREE.Group>(null);
   const segmentRefs = useRef<THREE.Mesh[]>([]);
   const positionHistory = useRef<{ x: number; y: number }[]>([]);
@@ -95,19 +96,22 @@ const Player: React.FC = () => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === 'Space' && !isPlaying && !gameOver) {
+        if (!isPremierePlaying) sfxStart();
         startGame();
         return;
       }
       if (!isPlaying) return;
       if (e.key === 'ArrowLeft' || e.key === 'a') {
+        if (!isPremierePlaying) sfxSwitch();
         moveLeft();
       } else if (e.key === 'ArrowRight' || e.key === 'd') {
+        if (!isPremierePlaying) sfxSwitch();
         moveRight();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isPlaying, gameOver, moveLeft, moveRight, startGame]);
+  }, [isPlaying, gameOver, moveLeft, moveRight, startGame, isPremierePlaying]);
 
   // Touch / Swipe controls — attached to .legends-game container, not window
   useEffect(() => {
@@ -146,6 +150,7 @@ const Player: React.FC = () => {
       // Tap detection: small movement + short duration
       if (Math.abs(dx) < 20 && Math.abs(dy) < 20 && elapsed < 300) {
         if (!state.isPlaying && !state.gameOver) {
+          if (!state.isPremierePlaying) sfxStart();
           state.startGame();
         }
         return;
@@ -154,6 +159,7 @@ const Player: React.FC = () => {
       // Swipe detection: enough horizontal distance and more horizontal than vertical
       if (Math.abs(dx) > 30 && Math.abs(dx) > Math.abs(dy)) {
         if (!state.isPlaying) return;
+        if (!state.isPremierePlaying) sfxSwitch();
         if (dx > 0) {
           state.moveRight();
         } else {
