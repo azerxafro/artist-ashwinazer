@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect, lazy } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
-import LegendsGame from './pages/LegendsGame';
+
+// Lazy-load the game page to code-split heavy Three.js dependencies
+const LegendsGame = lazy(() => import('./pages/LegendsGame'));
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -13,11 +15,17 @@ const App: React.FC = () => {
   }, [location]);
 
   return (
-    <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/game" element={<LegendsGame />} />
-      <Route path="/legends-and-lovers" element={<LegendsGame />} />
-    </Routes>
+    <Suspense fallback={
+      <div style={{ width: '100%', height: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', color: '#fff', fontSize: '10px', letterSpacing: '0.3em' }}>
+        LOADING...
+      </div>
+    }>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/game" element={<LegendsGame />} />
+        <Route path="/legends-and-lovers" element={<LegendsGame />} />
+      </Routes>
+    </Suspense>
   );
 };
 

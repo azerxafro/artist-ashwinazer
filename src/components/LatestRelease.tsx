@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { artistData } from '../data/artistData';
 
@@ -6,6 +6,9 @@ const LatestRelease: React.FC = () => {
   const { featuredAlbum, theme } = artistData;
   const [typedTitle, setTypedTitle] = useState('');
   const [titleVisible, setTitleVisible] = useState(false);
+  const [embedLoaded, setEmbedLoaded] = useState(false);
+
+  const handleIframeLoad = useCallback(() => setEmbedLoaded(true), []);
 
   // Typewriter for album title
   useEffect(() => {
@@ -58,13 +61,14 @@ const LatestRelease: React.FC = () => {
               </div>
             </div>
             <div className="relative mt-2 md:mt-0">
-              <div className="relative rounded-xl overflow-hidden border border-white/5">
+              <div className="relative rounded-xl overflow-hidden border border-white/5 bg-[#121212]">
                 <iframe
                   src={featuredAlbum.spotifyEmbed}
                   width="100%" height="352"
                   allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                  loading="lazy" className="rounded-xl" style={{ border: 'none' }}
+                  className="rounded-xl" style={{ border: 'none', opacity: embedLoaded ? 1 : 0, transition: 'opacity 0.4s ease' }}
                   title={`${featuredAlbum.title} on Spotify`}
+                  onLoad={handleIframeLoad}
                 />
               </div>
             </div>

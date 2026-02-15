@@ -80,12 +80,12 @@ const MusicSection: React.FC = () => {
                 <p className="text-center text-white/40 text-sm mb-6">
                   <span className="font-semibold text-white">{personas[activePersona].role}</span> — {personas[activePersona].description}
                 </p>
-                <div className="relative rounded-xl overflow-hidden border border-white/5">
+                <div className="relative rounded-xl overflow-hidden border border-white/5 bg-[#121212]">
                   <iframe
                     src={personas[activePersona].spotifyEmbed}
                     width="100%" height="380"
                     allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                    loading="lazy" className="rounded-xl" style={{ border: 'none' }}
+                    className="rounded-xl" style={{ border: 'none' }}
                     title={`${personas[activePersona].name} on Spotify`}
                   />
                 </div>

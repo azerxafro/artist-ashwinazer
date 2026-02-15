@@ -4,7 +4,7 @@ import { artistData } from '../data/artistData';
 
 const VideoShowcase: React.FC = () => {
   const { videos, theme } = artistData;
-  const [activeVideo, setActiveVideo] = useState(videos.featured);
+  const [activeVideo, setActiveVideo] = useState<{ id: string; title: string; category?: string }>(videos.featured);
   const [filter, setFilter] = useState<string>('All');
 
   const categories = ['All', ...new Set(videos.all.map(v => v.category))];
