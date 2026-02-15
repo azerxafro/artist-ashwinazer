@@ -20,11 +20,6 @@ main, section, footer, header, nav, article, aside {
   background-color: inherit;
 }
 
-/* Iframes (e.g. Spotify, YouTube) — dark while loading */
-iframe {
-  background-color: #121212;
-}
-
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 4px;
