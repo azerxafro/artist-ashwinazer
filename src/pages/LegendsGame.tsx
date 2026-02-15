@@ -52,16 +52,7 @@ const LegendsGame: React.FC = () => {
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  // Handle Space to Start (desktop)
-  React.useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.code === 'Space' && !isPlaying) {
-        startGame();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isPlaying, startGame]);
+  // Space-to-start is handled by Player.tsx (with SFX)
 
   // Handle tap-to-start on start screen
   const handleStartTap = (e: React.MouseEvent | React.TouchEvent) => {
@@ -126,7 +117,6 @@ const LegendsGame: React.FC = () => {
           <div
             className="game-start-screen"
             onClick={handleStartTap}
-            onTouchEnd={handleStartTap}
           >
             <h2 className="game-ready-text">READY?</h2>
             <div className="game-start-pill">
@@ -147,7 +137,6 @@ const LegendsGame: React.FC = () => {
             <p className="game-over-score">SCORE: {score}</p>
             <button
               onClick={handleRetryTap}
-              onTouchEnd={handleRetryTap}
               className="game-retry-btn"
             >
               TRY AGAIN

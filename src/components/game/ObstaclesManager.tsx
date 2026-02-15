@@ -4,6 +4,8 @@ import { useGameStore } from './store';
 import { sfxCollect, sfxDodge, sfxGameOver } from './sfx';
 import * as THREE from 'three';
 
+let nextObstacleId = 0;
+
 const LANE_WIDTH = 2;
 const SPAWN_RATE = 1.5;
 const SPEED_MULTIPLIER = 1.0;
@@ -93,7 +95,7 @@ const Obstacle: React.FC<{ position: [number, number, number]; phase: string }> 
 };
 
 const ObstaclesManager: React.FC = () => {
-  const { speed, isPlaying, gameOver, lane: playerLane, endGame, incrementScore, phase, isPremierePlaying } = useGameStore();
+  const { speed, isPlaying, gameOver, lane: playerLane, endGame, incrementScore, phase } = useGameStore();
   const [obstacles, setObstacles] = useState<ObstacleData[]>([]);
   const lastSpawnTime = useRef(0);
 
@@ -110,7 +112,7 @@ const ObstaclesManager: React.FC = () => {
       setObstacles(prev => [
         ...prev,
         {
-          id: Math.random(),
+          id: nextObstacleId++,
           lane: newLane,
           z: -50,
           type: isCollectible ? 'collectible' : 'obstacle'
@@ -123,32 +125,33 @@ const ObstaclesManager: React.FC = () => {
     setObstacles(prev => {
       const next: ObstacleData[] = [];
 
-      prev.forEach(obs => {
-        obs.z += speed * delta * SPEED_MULTIPLIER;
+      for (const obs of prev) {
+        const o = { ...obs };
+        o.z += speed * delta * SPEED_MULTIPLIER;
 
         // Collision window
-        if (obs.z > 2.5 && obs.z < 3.5) {
-          if (obs.lane === playerLane) {
-            if (obs.type === 'obstacle') {
-              if (!isPremierePlaying) sfxGameOver();
+        if (o.z > 2.5 && o.z < 3.5) {
+          if (o.lane === playerLane) {
+            if (o.type === 'obstacle') {
+              sfxGameOver();
               endGame();
             } else {
-              if (!isPremierePlaying) sfxCollect();
+              sfxCollect();
               incrementScore(100);
-              return;
+              continue; // consumed
             }
           }
         }
 
-        if (obs.z < 10) {
-          next.push(obs);
+        if (o.z < 10) {
+          next.push(o);
         } else {
-          if (obs.type === 'obstacle') {
-            if (!isPremierePlaying) sfxDodge();
+          if (o.type === 'obstacle') {
+            sfxDodge();
             incrementScore(10);
           }
         }
-      });
+      }
 
       return next;
     });

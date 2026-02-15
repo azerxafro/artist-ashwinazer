@@ -65,6 +65,7 @@ const LatestRelease: React.FC = () => {
                 <iframe
                   src={featuredAlbum.spotifyEmbed}
                   width="100%" height="352"
+                  loading="lazy"
                   allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                   className="rounded-xl" style={{ border: 'none', opacity: embedLoaded ? 1 : 0, transition: 'opacity 0.4s ease' }}
                   title={`${featuredAlbum.title} on Spotify`}
