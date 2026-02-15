@@ -161,26 +161,61 @@ const MusicSection: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Upcoming teaser */}
+        {/* Legends & Lovers Promo */}
         {upcoming && (
           <motion.div
-            className="mt-24 text-center"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            className="mt-24"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <div className="inline-block px-10 py-8 border border-white/5 rounded-2xl bg-white/[0.01] relative overflow-hidden">
-              <div className="absolute inset-0 opacity-5"
-                   style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,107,0,0.1) 3px, rgba(255,107,0,0.1) 4px)' }} />
-              <p className="text-[10px] tracking-[0.4em] text-white/20 mb-3">COMING {upcoming.year}</p>
-              <motion.p
-                className="text-3xl md:text-4xl font-black"
-                style={{ color: flickerOn ? theme.gradientTo : 'transparent' }}
-                transition={{ duration: 0.05 }}
+            <div className="relative w-full max-w-4xl mx-auto rounded-2xl overflow-hidden border border-white/5 group cursor-pointer"
+                 style={{ aspectRatio: '16/9' }}>
+              {/* Looping muted video background */}
+              <video
+                autoPlay muted loop playsInline
+                className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[3s]"
+                poster="/video/legends-lovers-teaser.mp4#t=0.5"
               >
-                {upcoming.title}
-              </motion.p>
-              <p className="text-white/30 text-sm mt-3">{upcoming.description}</p>
+                <source src="/video/legends-lovers-teaser.mp4" type="video/mp4" />
+              </video>
+
+              {/* Overlays */}
+              <div className="absolute inset-0 bg-black/50 group-hover:bg-black/40 transition-colors duration-700" />
+              <div className="absolute inset-0"
+                   style={{ background: `linear-gradient(180deg, transparent 30%, ${theme.primaryColor}15 100%)` }} />
+              <div className="absolute inset-0 opacity-[0.06] pointer-events-none"
+                   style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.04) 2px, rgba(255,255,255,0.04) 4px)' }} />
+
+              {/* Content */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-6">
+                <motion.p
+                  className="text-[10px] tracking-[0.6em] text-white/40 mb-4"
+                  animate={{ opacity: [0.4, 0.8, 0.4] }}
+                  transition={{ repeat: Infinity, duration: 3.69 }}
+                >
+                  COMING {upcoming.year}
+                </motion.p>
+                <motion.h3
+                  className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight mb-4 text-center"
+                  style={{ color: flickerOn ? 'white' : 'transparent' }}
+                  transition={{ duration: 0.05 }}
+                >
+                  {upcoming.title}
+                </motion.h3>
+                <p className="text-white/40 text-sm md:text-base max-w-md text-center tracking-wide mb-8">
+                  {upcoming.description}
+                </p>
+                <div className="flex items-center gap-3 text-[10px] tracking-[0.4em] uppercase"
+                     style={{ color: theme.primaryColor }}>
+                  <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: theme.primaryColor, boxShadow: `0 0 12px ${theme.primaryColor}` }} />
+                  PRESS FOLLOW TO BE READY
+                </div>
+              </div>
+
+              {/* Vignette */}
+              <div className="absolute inset-0 pointer-events-none"
+                   style={{ boxShadow: 'inset 0 0 120px 40px rgba(0,0,0,0.6)' }} />
             </div>
           </motion.div>
         )}

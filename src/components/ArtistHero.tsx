@@ -120,7 +120,7 @@ const ArtistHero: React.FC = () => {
 
         {/* Glitch title */}
         <motion.h1
-          className="text-6xl sm:text-8xl md:text-[10rem] font-black tracking-tight leading-none mb-6 relative"
+          className="text-4xl sm:text-6xl md:text-8xl lg:text-[10rem] font-black tracking-tight leading-none mb-6 relative"
           initial={{ opacity: 0, scale: 0.85, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
