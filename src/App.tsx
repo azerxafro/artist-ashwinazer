@@ -14,6 +14,7 @@ import StorySection from './components/StorySection';
 import GallerySection from './components/GallerySection';
 import ArtistFooter from './components/ArtistFooter';
 import ArtistNav from './components/ArtistNav';
+import { initGA } from './utils/analytics';
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -25,6 +26,7 @@ const App: React.FC = () => {
   });
 
   useEffect(() => {
+    initGA(); // Initialize Google Analytics
     const minLoadTime = 1800;
     const startTime = Date.now();
     const handleLoad = () => {
