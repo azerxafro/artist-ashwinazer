@@ -10,11 +10,18 @@ import ObstaclesManager from '../components/game/ObstaclesManager';
 import '../components/game/game.css';
 
 const GameScene = () => {
+  const { phase } = useGameStore();
+  const phaseColor = phase === 'legend' ? '#D4AF37' : '#ff0055';
+
   return (
     <>
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[10, 10, 5]} intensity={1} />
-      <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+      <ambientLight intensity={0.15} />
+      <directionalLight position={[5, 8, 5]} intensity={0.6} color="#ffffff" />
+      {/* Colored rim lights for atmosphere */}
+      <pointLight position={[-8, 4, -10]} color={phaseColor} intensity={1.5} distance={40} />
+      <pointLight position={[8, 4, -10]} color={phaseColor} intensity={1.5} distance={40} />
+      <pointLight position={[0, 6, -30]} color={phaseColor} intensity={2} distance={50} />
+      <Stars radius={80} depth={60} count={3000} factor={3} saturation={0.2} fade speed={0.5} />
       <World />
       <Player />
       <ObstaclesManager />
@@ -45,7 +52,7 @@ const LegendsGame: React.FC = () => {
         <Suspense fallback={null}>
           <GameScene />
           <EffectComposer>
-            <Bloom luminanceThreshold={0.2} luminanceSmoothing={0.9} height={300} intensity={1.5} />
+            <Bloom luminanceThreshold={0.1} luminanceSmoothing={0.8} height={400} intensity={2.5} />
           </EffectComposer>
         </Suspense>
       </Canvas>

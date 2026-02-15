@@ -1,8 +1,16 @@
 @import "tailwindcss";
 
-/* Smooth scroll */
+/* Smooth scroll + Prevent white flash */
 html {
   scroll-behavior: smooth;
+  background-color: #050505;
+}
+
+body {
+  background-color: #050505;
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Custom scrollbar */
@@ -84,4 +92,27 @@ html {
   .h-screen {
     height: 100dvh;
   }
+}
+
+/* Global noise texture background */
+.global-noise-texture {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* Section gradient backgrounds */
+.gallery-bg-gradient {
+  background: radial-gradient(ellipse at 50% 0%, rgba(255, 0, 85, 0.04) 0%, transparent 60%);
+}
+.video-bg-gradient {
+  background: radial-gradient(ellipse at 80% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Mask gradient for horizontal scroll fade */
+.mask-gradient-right {
+  -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+  mask-image: linear-gradient(to right, black 85%, transparent 100%);
 }
