@@ -7,6 +7,16 @@ const ArtistHero: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [glitch, setGlitch] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile for performance optimizations
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   // Glitch effect every ~6s
   useEffect(() => {
@@ -30,6 +40,7 @@ const ArtistHero: React.FC = () => {
 
   // 36 particles (3×6×...9 implied)
   useEffect(() => {
+    if (isMobile) return; // Skip particles on mobile for performance
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -78,13 +89,13 @@ const ArtistHero: React.FC = () => {
     animate();
 
     return () => { cancelAnimationFrame(animId); window.removeEventListener('resize', resize); };
-  }, []);
+  }, [isMobile]);
 
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden" id="hero">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0a0002] to-[#050505]" />
-      <canvas ref={canvasRef} className="absolute inset-0 z-[1]" />
+      <canvas ref={canvasRef} className="absolute inset-0 z-[1]" style={{ display: isMobile ? 'none' : 'block' }} />
 
       {/* Scan lines overlay */}
       <div className="absolute inset-0 z-[2] pointer-events-none opacity-[0.04]"
@@ -106,8 +117,8 @@ const ArtistHero: React.FC = () => {
       </motion.div>
 
       {/* Content with parallax */}
-      <div className="relative z-10 text-center px-6 max-w-5xl"
-           style={{ transform: `translate(${mousePos.x * 8}px, ${mousePos.y * 5}px)` }}>
+      <div className="relative z-10 text-center px-4 md:px-6 max-w-5xl"
+           style={{ transform: isMobile ? 'none' : `translate(${mousePos.x * 8}px, ${mousePos.y * 5}px)` }}>
         <motion.p
           className="text-[10px] md:text-xs tracking-[0.6em] mb-6 uppercase"
           style={{ color: theme.primaryColor }}
@@ -120,7 +131,7 @@ const ArtistHero: React.FC = () => {
 
         {/* Glitch title */}
         <motion.h1
-          className="text-4xl sm:text-6xl md:text-8xl lg:text-[10rem] font-black tracking-tight leading-none mb-6 relative"
+          className="text-3xl sm:text-5xl md:text-8xl lg:text-[10rem] font-black tracking-tight leading-none mb-4 md:mb-6 relative"
           initial={{ opacity: 0, scale: 0.85, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
@@ -159,7 +170,7 @@ const ArtistHero: React.FC = () => {
         </motion.h1>
 
         <motion.p
-          className="text-white/40 text-sm md:text-base max-w-lg mx-auto mb-10 tracking-wide"
+          className="text-white/40 text-xs md:text-base max-w-lg mx-auto mb-8 md:mb-10 tracking-wide"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.8 }}
@@ -175,7 +186,7 @@ const ArtistHero: React.FC = () => {
           transition={{ duration: 0.6, delay: 1 }}
         >
           <a href={hero.ctaLink} target="_blank" rel="noopener noreferrer"
-             className="group relative px-10 py-4 text-sm tracking-[0.25em] font-bold text-black rounded-full overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(255,0,85,0.4)]"
+             className="group relative px-8 md:px-10 py-3.5 md:py-4 text-xs md:text-sm tracking-[0.2em] md:tracking-[0.25em] font-bold text-black rounded-full overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(255,0,85,0.4)]"
              style={{ background: `linear-gradient(135deg, ${theme.primaryColor}, ${theme.gradientTo})` }}>
             <span className="relative z-10">{hero.ctaText}</span>
             <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -183,7 +194,7 @@ const ArtistHero: React.FC = () => {
 
           {hero.secondaryCta && (
             <a href={hero.secondaryCta.link}
-               className="px-10 py-4 text-sm tracking-[0.25em] border border-white/15 rounded-full text-white/50 hover:text-white hover:border-white/40 hover:shadow-[0_0_30px_rgba(255,255,255,0.05)] transition-all duration-500">
+               className="px-8 md:px-10 py-3.5 md:py-4 text-xs md:text-sm tracking-[0.2em] md:tracking-[0.25em] border border-white/15 rounded-full text-white/50 hover:text-white hover:border-white/40 hover:shadow-[0_0_30px_rgba(255,255,255,0.05)] transition-all duration-500">
               {hero.secondaryCta.text}
             </a>
           )}

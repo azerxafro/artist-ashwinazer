@@ -182,16 +182,17 @@
 
       /* Custom Cursor (desktop only) */
       @media (pointer: fine) and (hover: hover) {
-        body {
-          cursor: none;
+        *,
+        *::before,
+        *::after {
+          cursor: none !important;
         }
-        a,
-        button,
-        select,
-        input,
-        textarea,
-        [role="button"] {
-          cursor: none;
+      }
+      @media (pointer: coarse) {
+        *,
+        *::before,
+        *::after {
+          cursor: auto !important;
         }
       }
 

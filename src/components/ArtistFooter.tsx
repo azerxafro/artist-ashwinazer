@@ -5,7 +5,7 @@ const ArtistFooter: React.FC = () => {
   const { theme, socials, label } = artistData;
 
   return (
-    <footer className="py-16 px-6 border-t border-white/5 relative">
+    <footer className="py-12 md:py-16 px-4 md:px-6 border-t border-white/5 relative">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-8">
           <div>

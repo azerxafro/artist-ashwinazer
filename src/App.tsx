@@ -7,6 +7,7 @@ import LoadingScreen from './components/LoadingScreen';
 import CustomCursor from './components/CustomCursor';
 import ThreeSixNine from './components/ThreeSixNine';
 import ArtistHero from './components/ArtistHero';
+import LatestRelease from './components/LatestRelease';
 import MusicSection from './components/MusicSection';
 import VideoShowcase from './components/VideoShowcase';
 import StorySection from './components/StorySection';
@@ -77,6 +78,7 @@ const App: React.FC = () => {
 
         <main>
           <ArtistHero />
+          <LatestRelease />
           <MusicSection />
           <VideoShowcase />
           <StorySection />

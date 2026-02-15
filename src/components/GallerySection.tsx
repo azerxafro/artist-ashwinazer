@@ -20,7 +20,7 @@ const GallerySection: React.FC = () => {
   const heights = ['aspect-[3/4]', 'aspect-square', 'aspect-[4/5]', 'aspect-[3/4]'];
 
   return (
-    <section id="gallery" className="py-24 md:py-36 px-6 relative overflow-hidden" ref={sectionRef}>
+    <section id="gallery" className="py-16 md:py-36 px-4 md:px-6 relative overflow-hidden" ref={sectionRef}>
       {/* Section divider */}
       <motion.div
         className="absolute top-0 left-1/4 right-1/4 h-px"

@@ -39,12 +39,23 @@ html {
   border-width: 0;
 }
 
-/* Hide default cursor on desktop (custom cursor) */
-@media (pointer: fine) {
-  body {
-    cursor: none;
+/* ──────────────────────────────────────────
+   Custom Cursor — Desktop Only
+   Completely disable system cursor on pointer devices
+   ────────────────────────────────────────── */
+@media (pointer: fine) and (hover: hover) {
+  *,
+  *::before,
+  *::after {
+    cursor: none !important;
   }
-  a, button, input, textarea, select {
-    cursor: none;
+}
+
+/* Safety net — force auto cursor on touch devices */
+@media (pointer: coarse) {
+  *,
+  *::before,
+  *::after {
+    cursor: auto !important;
   }
 }

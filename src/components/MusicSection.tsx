@@ -3,25 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { artistData } from '../data/artistData';
 
 const MusicSection: React.FC = () => {
-  const { featuredAlbum, personas, theme, upcoming } = artistData;
+  const { personas, theme, upcoming } = artistData;
   const [activePersona, setActivePersona] = useState(0);
-  const [typedTitle, setTypedTitle] = useState('');
-  const [titleVisible, setTitleVisible] = useState(false);
   const [flickerOn, setFlickerOn] = useState(true);
-
-  // Typewriter for album title
-  useEffect(() => {
-    if (!titleVisible) return;
-    let i = 0;
-    const text = featuredAlbum.title;
-    setTypedTitle('');
-    const interval = setInterval(() => {
-      setTypedTitle(text.slice(0, i + 1));
-      i++;
-      if (i >= text.length) clearInterval(interval);
-    }, 120);
-    return () => clearInterval(interval);
-  }, [titleVisible, featuredAlbum.title]);
 
   // Upcoming flicker
   useEffect(() => {
@@ -33,7 +17,7 @@ const MusicSection: React.FC = () => {
   }, []);
 
   return (
-    <section id="music" className="py-24 md:py-36 px-6 relative overflow-hidden">
+    <section id="music" className="py-16 md:py-28 px-4 md:px-6 relative overflow-hidden">
       {/* Spotlight glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full blur-[200px] opacity-[0.08]"
            style={{ background: `radial-gradient(circle, ${theme.primaryColor}, transparent)` }} />
@@ -50,64 +34,13 @@ const MusicSection: React.FC = () => {
 
       <div className="max-w-6xl mx-auto relative z-10">
         <motion.div
-          className="text-center mb-16"
+          className="text-center mb-12"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
         >
           <p className="text-[10px] tracking-[0.6em] mb-3" style={{ color: theme.primaryColor }}>LISTEN</p>
-          <h2 className="text-4xl md:text-6xl font-black tracking-tight">THE MUSIC</h2>
-        </motion.div>
-
-        {/* Featured Album */}
-        <motion.div
-          className="mb-24"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          onViewportEnter={() => setTitleVisible(true)}
-          viewport={{ once: true }}
-        >
-          <div className="grid md:grid-cols-2 gap-10 items-center">
-            <div>
-              <p className="text-[10px] tracking-[0.4em] mb-3" style={{ color: theme.primaryColor }}>LATEST ALBUM</p>
-              <h3 className="text-5xl md:text-8xl font-black mb-4 min-h-[1.2em]">
-                {typedTitle}
-                <motion.span
-                  className="inline-block w-[3px] h-[0.8em] ml-1 align-middle"
-                  style={{ backgroundColor: theme.primaryColor }}
-                  animate={{ opacity: [1, 0, 1] }}
-                  transition={{ repeat: Infinity, duration: 0.8 }}
-                />
-              </h3>
-              <p className="text-white/30 text-sm tracking-wider mb-2">{featuredAlbum.subtitle}</p>
-              <p className="text-white/50 text-sm leading-relaxed mb-8">{featuredAlbum.description}</p>
-              <div className="flex gap-4">
-                <a href={featuredAlbum.spotifyUrl} target="_blank" rel="noopener noreferrer"
-                   className="px-8 py-3 text-xs tracking-[0.2em] rounded-full text-black font-bold transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,0,85,0.3)]"
-                   style={{ background: `linear-gradient(135deg, ${theme.primaryColor}, ${theme.gradientTo})` }}>
-                  SPOTIFY
-                </a>
-                <a href={featuredAlbum.appleMusicUrl} target="_blank" rel="noopener noreferrer"
-                   className="px-8 py-3 text-xs tracking-[0.2em] rounded-full border border-white/15 text-white/50 hover:border-white/40 hover:text-white transition-all duration-300">
-                  APPLE MUSIC
-                </a>
-              </div>
-            </div>
-            <div className="relative">
-              {/* Red spotlight behind embed */}
-              <div className="absolute -inset-4 rounded-2xl blur-3xl opacity-10"
-                   style={{ background: `radial-gradient(circle, ${theme.primaryColor}, transparent)` }} />
-              <div className="relative rounded-xl overflow-hidden border border-white/5">
-                <iframe
-                  src={featuredAlbum.spotifyEmbed}
-                  width="100%" height="380"
-                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                  loading="lazy" className="rounded-xl" style={{ border: 'none' }}
-                  title={`${featuredAlbum.title} on Spotify`}
-                />
-              </div>
-            </div>
-          </div>
+          <h2 className="text-3xl md:text-6xl font-black tracking-tight">THE MUSIC</h2>
         </motion.div>
 
         {/* Two Personas */}
@@ -120,12 +53,12 @@ const MusicSection: React.FC = () => {
             TWO PERSONAS · ONE ARTIST
           </p>
 
-          <div className="flex justify-center gap-4 mb-10">
+          <div className="flex justify-center gap-3 md:gap-4 mb-8 md:mb-10">
             {personas.map((p, i) => (
               <button
                 key={p.name}
                 onClick={() => setActivePersona(i)}
-                className={`relative px-8 py-3 text-xs tracking-[0.2em] rounded-full border transition-all duration-500 overflow-hidden ${
+                className={`relative px-5 md:px-8 py-2.5 md:py-3 text-[10px] md:text-xs tracking-[0.15em] md:tracking-[0.2em] rounded-full border transition-all duration-500 overflow-hidden ${
                   activePersona === i ? 'text-black font-bold' : 'text-white/40 border-white/10 hover:border-white/25'
                 }`}
                 style={activePersona === i ? { backgroundColor: p.color, borderColor: p.color, boxShadow: `0 0 25px ${p.color}30` } : {}}
@@ -169,7 +102,7 @@ const MusicSection: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <div className="relative w-full max-w-4xl mx-auto rounded-2xl overflow-hidden border border-white/5 group cursor-pointer"
+            <div className="relative w-full max-w-4xl mx-auto rounded-xl md:rounded-2xl overflow-hidden border border-white/5 group cursor-pointer"
                  style={{ aspectRatio: '16/9' }}>
               {/* Looping muted video background */}
               <video
@@ -197,13 +130,13 @@ const MusicSection: React.FC = () => {
                   COMING {upcoming.year}
                 </motion.p>
                 <motion.h3
-                  className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight mb-4 text-center"
+                  className="text-2xl sm:text-4xl md:text-7xl font-black tracking-tight mb-3 md:mb-4 text-center"
                   style={{ color: flickerOn ? 'white' : 'transparent' }}
                   transition={{ duration: 0.05 }}
                 >
                   {upcoming.title}
                 </motion.h3>
-                <p className="text-white/40 text-sm md:text-base max-w-md text-center tracking-wide mb-8">
+                <p className="text-white/40 text-xs md:text-base max-w-md text-center tracking-wide mb-4 md:mb-8 px-2">
                   {upcoming.description}
                 </p>
                 <div className="flex items-center gap-3 text-[10px] tracking-[0.4em] uppercase"
@@ -217,6 +150,27 @@ const MusicSection: React.FC = () => {
               <div className="absolute inset-0 pointer-events-none"
                    style={{ boxShadow: 'inset 0 0 120px 40px rgba(0,0,0,0.6)' }} />
             </div>
+
+            {/* Follow on Spotify CTA */}
+            <motion.div
+              className="flex justify-center mt-8 md:mt-10"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+            >
+              <a
+                href="https://open.spotify.com/artist/6M1VSmwtcuwS1DnvXTGk7P"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-3 px-8 md:px-10 py-3.5 md:py-4 text-xs md:text-sm tracking-[0.2em] font-bold text-white rounded-full border-2 border-[#1DB954] bg-[#1DB954]/10 hover:bg-[#1DB954] hover:text-black transition-all duration-500 hover:shadow-[0_0_40px_rgba(29,185,84,0.35)] hover:scale-105"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+                </svg>
+                FOLLOW ON SPOTIFY
+              </a>
+            </motion.div>
           </motion.div>
         )}
       </div>
