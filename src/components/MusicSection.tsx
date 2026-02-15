@@ -17,7 +17,7 @@ const MusicSection: React.FC = () => {
   }, []);
 
   return (
-    <section id="music" className="py-16 md:py-28 px-4 md:px-6 relative overflow-hidden">
+    <section id="music" className="py-16 md:py-28 px-4 md:px-6 relative overflow-hidden bg-[#050505]">
       {/* Spotlight glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full blur-[200px] opacity-[0.08]"
            style={{ background: `radial-gradient(circle, ${theme.primaryColor}, transparent)` }} />

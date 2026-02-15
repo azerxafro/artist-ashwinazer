@@ -12,7 +12,7 @@ const VideoShowcase: React.FC = () => {
   const upNext = filtered.filter(v => v.id !== activeVideo.id);
 
   return (
-    <section id="videos" className="py-8 md:py-24 relative overflow-hidden">
+    <section id="videos" className="py-8 md:py-24 relative overflow-hidden bg-[#050505]">
       <div className="absolute inset-0 pointer-events-none opacity-20 video-bg-gradient" />
 
       <div className="max-w-7xl mx-auto">

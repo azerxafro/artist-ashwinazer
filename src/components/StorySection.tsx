@@ -34,7 +34,7 @@ const StorySection: React.FC = () => {
   const lineHeight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
 
   return (
-    <section id="story" className="py-16 md:py-36 px-4 md:px-6 relative overflow-hidden" ref={containerRef}>
+    <section id="story" className="py-16 md:py-36 px-4 md:px-6 relative overflow-hidden bg-[#050505]" ref={containerRef}>
       {/* Section divider */}
       <motion.div
         className="absolute top-0 left-1/4 right-1/4 h-px"

@@ -1,9 +1,11 @@
 @import "tailwindcss";
 
-/* Smooth scroll + Prevent white flash */
+/* ── Anti–white-flash: nuclear dark enforcement ── */
 html {
   scroll-behavior: smooth;
   background-color: #050505;
+  color-scheme: dark;                     /* Browser-native dark: scrollbar, overscroll, inputs */
+  overscroll-behavior: none;             /* Kill rubber-band white flash on iOS/macOS */
 }
 
 body {
@@ -11,6 +13,16 @@ body {
   color: #fff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* All sections & structural divs get dark bg as repaint safety net */
+main, section, footer, header, nav, article, aside {
+  background-color: inherit;
+}
+
+/* Iframes (e.g. Spotify, YouTube) — dark while loading */
+iframe {
+  background-color: #121212;
 }
 
 /* Custom scrollbar */

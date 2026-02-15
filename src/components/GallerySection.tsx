@@ -30,7 +30,7 @@ const GallerySection: React.FC = () => {
   }, [selected]);
 
   return (
-    <section id="gallery" className="py-12 md:py-20 relative overflow-hidden bg-black/40">
+    <section id="gallery" className="py-12 md:py-20 relative overflow-hidden bg-[#050505]">
        <div className="absolute inset-0 pointer-events-none gallery-bg-gradient" />
 
       <div className="max-w-7xl mx-auto px-4 md:px-6 mb-8 md:mb-10 flex flex-col md:flex-row items-start md:items-end justify-between gap-4 md:gap-6">

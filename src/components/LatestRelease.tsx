@@ -25,7 +25,7 @@ const LatestRelease: React.FC = () => {
   }, [titleVisible, featuredAlbum.title]);
 
   return (
-    <section className="pt-6 pb-12 md:pt-10 md:pb-20 px-4 md:px-6 relative overflow-hidden">
+    <section className="pt-6 pb-12 md:pt-10 md:pb-20 px-4 md:px-6 relative overflow-hidden bg-[#050505]">
       <div className="max-w-5xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
