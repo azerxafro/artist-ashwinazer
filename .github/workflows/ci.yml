@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  gitlint:
+    name: gitlint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 0
+
+      - name: Install gitlint
+        run: pip install gitlint
+
+      - name: Run gitlint
+        run: gitlint --commits origin/main..HEAD || true
+
+      - name: Notify Vercel
+        uses: vercel/repository-dispatch/actions/status@bfa6e241eef4ef846bee3d8786c4ab95cdca317d # latest
+        with:
+          name: "Vercel - epk: gitlint"
+          github_token: ${{ secrets.VERCELEPK_PAT }}
