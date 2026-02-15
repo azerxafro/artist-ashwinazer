@@ -59,3 +59,29 @@ html {
     cursor: auto !important;
   }
 }
+
+/* Override cursor: none specifically on the game page */
+.legends-game,
+.legends-game *,
+.legends-game *::before,
+.legends-game *::after {
+  cursor: auto !important;
+}
+
+/* Mobile-first touch improvements */
+@media (pointer: coarse) {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* 100dvh fix for mobile browsers */
+@supports (height: 100dvh) {
+  .h-screen {
+    height: 100dvh;
+  }
+}

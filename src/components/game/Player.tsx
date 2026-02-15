@@ -1,59 +1,201 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useGameStore } from './store';
 import * as THREE from 'three';
 
-const LANE_WIDTH = 2; // Distance between lanes
+const LANE_WIDTH = 2;
+const SEGMENT_COUNT = 8;
+const SEGMENT_SPACING = 0.45;
+const SEGMENT_RADIUS = 0.22;
 
 const Player: React.FC = () => {
-  const { lane, phase, isPlaying } = useGameStore();
-  const playerRef = useRef<THREE.Mesh>(null);
-  
-  // Smoothly interpolate position
+  const { lane, phase, isPlaying, gameOver, moveLeft, moveRight, startGame } = useGameStore();
+  const groupRef = useRef<THREE.Group>(null);
+  const segmentRefs = useRef<THREE.Mesh[]>([]);
+  const positionHistory = useRef<{ x: number; y: number }[]>([]);
+
+  // Initialize position history
+  useMemo(() => {
+    positionHistory.current = Array.from({ length: SEGMENT_COUNT }, () => ({
+      x: 0,
+      y: -0.3,
+    }));
+  }, []);
+
+  // Head material - emissive gold/pink
+  const headMaterial = useMemo(() => {
+    return new THREE.MeshStandardMaterial({
+      roughness: 0.15,
+      metalness: 0.9,
+    });
+  }, []);
+
+  // Body material
+  const bodyMaterial = useMemo(() => {
+    return new THREE.MeshStandardMaterial({
+      roughness: 0.25,
+      metalness: 0.7,
+    });
+  }, []);
+
+  // Update colors reactively
+  useEffect(() => {
+    const headColor = phase === 'legend' ? '#D4AF37' : '#ff0055';
+    const bodyColor = phase === 'legend' ? '#b8860b' : '#cc0044';
+    headMaterial.color.set(headColor);
+    headMaterial.emissive.set(headColor);
+    headMaterial.emissiveIntensity = 0.6;
+    bodyMaterial.color.set(bodyColor);
+    bodyMaterial.emissive.set(bodyColor);
+    bodyMaterial.emissiveIntensity = 0.3;
+  }, [phase, headMaterial, bodyMaterial]);
+
+  // Smooth movement + body trail
   useFrame((state, delta) => {
-    if (playerRef.current) {
-      const targetX = (lane - 1) * LANE_WIDTH;
-      // Simple lerp for smoothness
-      playerRef.current.position.x = THREE.MathUtils.lerp(playerRef.current.position.x, targetX, delta * 10);
-      
-      // Add a slight bobbing motion
-      if (isPlaying) {
-         playerRef.current.position.y = -0.5 + Math.sin(state.clock.elapsedTime * 10) * 0.1;
-      }
+    if (!groupRef.current) return;
+
+    const targetX = (lane - 1) * LANE_WIDTH;
+    const headX = THREE.MathUtils.lerp(
+      positionHistory.current[0].x,
+      targetX,
+      Math.min(delta * 12, 1)
+    );
+    const headY = isPlaying
+      ? -0.3 + Math.sin(state.clock.elapsedTime * 8) * 0.08
+      : -0.3;
+
+    positionHistory.current[0] = { x: headX, y: headY };
+
+    // Trail: each segment follows the previous one
+    for (let i = 1; i < SEGMENT_COUNT; i++) {
+      const prev = positionHistory.current[i - 1];
+      const curr = positionHistory.current[i];
+      curr.x = THREE.MathUtils.lerp(curr.x, prev.x, Math.min(delta * (10 - i), 1));
+      curr.y = THREE.MathUtils.lerp(curr.y, prev.y - 0.02, Math.min(delta * 8, 1));
     }
+
+    // Apply positions to segment meshes
+    segmentRefs.current.forEach((mesh, i) => {
+      if (!mesh) return;
+      const pos = positionHistory.current[i];
+      mesh.position.x = pos.x;
+      mesh.position.y = pos.y;
+      mesh.position.z = 3 + i * SEGMENT_SPACING;
+      // Scale: head is biggest, tail tapers
+      const scale = 1 - i * 0.08;
+      mesh.scale.set(scale, scale, scale);
+      // Undulation
+      if (isPlaying) {
+        mesh.position.y += Math.sin(state.clock.elapsedTime * 6 + i * 0.6) * 0.04;
+      }
+    });
   });
 
-  // Handle keyboard input
+  // Keyboard input
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === 'Space' && !isPlaying && !gameOver) {
+        startGame();
+        return;
+      }
       if (!isPlaying) return;
-      
       if (e.key === 'ArrowLeft' || e.key === 'a') {
-        useGameStore.getState().moveLeft();
+        moveLeft();
       } else if (e.key === 'ArrowRight' || e.key === 'd') {
+        moveRight();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isPlaying, gameOver, moveLeft, moveRight, startGame]);
+
+  // Touch / Swipe controls for mobile
+  useEffect(() => {
+    let startX = 0;
+    let startY = 0;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      const endX = e.changedTouches[0].clientX;
+      const endY = e.changedTouches[0].clientY;
+      const dx = endX - startX;
+      const dy = endY - startY;
+
+      // Only register horizontal swipes (not vertical scrolls)
+      if (Math.abs(dx) < 30 || Math.abs(dx) < Math.abs(dy)) {
+        // If it's a tap (small movement), start the game
+        if (Math.abs(dx) < 10 && Math.abs(dy) < 10) {
+          if (!useGameStore.getState().isPlaying && !useGameStore.getState().gameOver) {
+            useGameStore.getState().startGame();
+          }
+        }
+        return;
+      }
+
+      if (!useGameStore.getState().isPlaying) return;
+
+      if (dx > 0) {
         useGameStore.getState().moveRight();
+      } else {
+        useGameStore.getState().moveLeft();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isPlaying]);
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd, { passive: true });
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, []);
 
   const color = phase === 'legend' ? '#D4AF37' : '#ff0055';
 
   return (
-    <mesh ref={playerRef} position={[0, -0.5, 3]}>
-      <boxGeometry args={[0.8, 0.8, 0.8]} />
-      <meshStandardMaterial 
-        color={color} 
-        emissive={color}
-        emissiveIntensity={0.5}
-        roughness={0.2}
-        metalness={0.8}
+    <group ref={groupRef}>
+      {/* Snake segments */}
+      {Array.from({ length: SEGMENT_COUNT }, (_, i) => (
+        <mesh
+          key={i}
+          ref={(el) => { if (el) segmentRefs.current[i] = el; }}
+          position={[0, -0.3, 3 + i * SEGMENT_SPACING]}
+        >
+          {i === 0 ? (
+            // Head: slightly elongated capsule shape
+            <capsuleGeometry args={[SEGMENT_RADIUS * 1.2, SEGMENT_RADIUS * 0.8, 6, 12]} />
+          ) : (
+            <sphereGeometry args={[SEGMENT_RADIUS * (1 - i * 0.08), 12, 12]} />
+          )}
+          {i === 0 ? (
+            <primitive object={headMaterial} attach="material" />
+          ) : (
+            <primitive object={bodyMaterial} attach="material" />
+          )}
+        </mesh>
+      ))}
+
+      {/* Eyes on the head (two small white spheres) */}
+      <mesh position={[-0.12, -0.15, 2.78]}>
+        <sphereGeometry args={[0.06, 8, 8]} />
+        <meshStandardMaterial color="#fff" emissive="#fff" emissiveIntensity={0.8} />
+      </mesh>
+      <mesh position={[0.12, -0.15, 2.78]}>
+        <sphereGeometry args={[0.06, 8, 8]} />
+        <meshStandardMaterial color="#fff" emissive="#fff" emissiveIntensity={0.8} />
+      </mesh>
+
+      {/* Glow light following the head */}
+      <pointLight
+        position={[positionHistory.current[0]?.x || 0, 0, 3]}
+        distance={4}
+        intensity={2}
+        color={color}
       />
-      {/* Trail/Glow effect could go here */}
-      <pointLight distance={3} intensity={2} color={color} />
-    </mesh>
+    </group>
   );
 };
 

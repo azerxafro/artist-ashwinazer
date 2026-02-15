@@ -81,15 +81,15 @@ const LandingPage: React.FC = () => {
           <LatestRelease />
           
           {/* Legends & Lovers Promo Banner */}
-          <section className="py-20 relative overflow-hidden bg-black flex justify-center items-center">
+          <section className="py-12 md:py-20 relative overflow-hidden bg-black flex justify-center items-center">
              <div className="absolute inset-0 bg-[url('/images/hero-bg.webp')] opacity-20 bg-cover bg-center mix-blend-overlay"></div>
-             <div className="relative z-10 text-center max-w-4xl mx-auto px-6 border border-white/10 bg-black/50 backdrop-blur-md p-12 rounded-3xl">
-                <p className="text-xs tracking-[0.6em] text-[#D4AF37] mb-4">COMING 2026</p>
-                <h2 className="text-5xl md:text-7xl font-black italic tracking-tighter mb-8 bg-clip-text text-transparent bg-gradient-to-r from-[#D4AF37] to-[#ff0055]">
+             <div className="relative z-10 text-center max-w-4xl mx-auto px-4 md:px-6 border border-white/10 bg-black/50 backdrop-blur-md p-8 md:p-12 rounded-2xl md:rounded-3xl">
+                <p className="text-[10px] md:text-xs tracking-[0.6em] text-[#D4AF37] mb-3 md:mb-4">COMING 2026</p>
+                <h2 className="text-3xl md:text-7xl font-black italic tracking-tighter mb-6 md:mb-8 bg-clip-text text-transparent bg-gradient-to-r from-[#D4AF37] to-[#ff0055]">
                    LEGENDS & LOVERS
                 </h2>
-                <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
-                   <a href="/game" className="px-10 py-4 bg-white text-black font-bold tracking-widest rounded-full hover:scale-105 transition-transform duration-300">
+                <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center items-center">
+                   <a href="/game" className="px-8 md:px-10 py-3 md:py-4 bg-white text-black font-bold tracking-widest rounded-full hover:scale-105 transition-transform duration-300 text-sm">
                       ENTER THE EXPERIENCE
                    </a>
                 </div>

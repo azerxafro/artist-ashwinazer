@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 
 const CustomCursor: React.FC = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const location = useLocation();
 
   // Detect touch/mobile — skip cursor entirely
   useEffect(() => {
@@ -63,7 +65,9 @@ const CustomCursor: React.FC = () => {
     }
   };
 
+  // Hide on mobile, touch devices, and game page
   if (isTouchDevice) return null;
+  if (location.pathname === '/game') return null;
 
   return (
     <motion.div
