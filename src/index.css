@@ -20,6 +20,11 @@ main, section, footer, header, nav, article, aside {
   background-color: inherit;
 }
 
+/* Fix Spotify album art not rendering: prevent global dark mode from bleeding into iframes */
+iframe {
+  color-scheme: normal;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 4px;

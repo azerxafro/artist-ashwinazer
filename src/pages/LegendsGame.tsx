@@ -77,7 +77,7 @@ const LegendsGame: React.FC = () => {
 
       {/* 3D Scene */}
       <Canvas
-        camera={{ position: [0, 2, 6], fov: isMobile ? 65 : 60 }}
+        camera={{ position: isMobile ? [0, 3, 8] : [0, 2, 6], fov: isMobile ? 65 : 60 }}
         style={{ touchAction: 'none' }}
         dpr={isMobile ? [1, 1.5] : [1, 2]}
         performance={{ min: 0.5 }}
