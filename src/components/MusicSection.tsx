@@ -84,7 +84,6 @@ const MusicSection: React.FC = () => {
                   <iframe
                     src={personas[activePersona].spotifyEmbed}
                     width="100%" height="380"
-                    loading="lazy"
                     allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                     className="rounded-xl" style={{ border: 'none' }}
                     title={`${personas[activePersona].name} on Spotify`}

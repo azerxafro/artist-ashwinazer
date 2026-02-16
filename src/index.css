@@ -21,8 +21,8 @@ main, section, footer, header, nav, article, aside {
 }
 
 /* Fix Spotify album art not rendering: prevent global dark mode from bleeding into iframes */
-iframe {
-  color-scheme: normal;
+iframe[src*="spotify"] {
+  color-scheme: light;
 }
 
 /* Custom scrollbar */
