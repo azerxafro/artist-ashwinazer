@@ -68,11 +68,14 @@ const LegendsGame: React.FC = () => {
     startGame();
   };
 
+  const phaseLabel = phase === 'legend' ? 'LEGEND' : 'LOVER';
+  const paddedScore = score.toString().padStart(6, '0');
+
   return (
     <div className="legends-game">
       <AudioManager />
 
-      {/* 3D Scene — reduced quality on mobile */}
+      {/* 3D Scene */}
       <Canvas
         camera={{ position: [0, 2, 6], fov: isMobile ? 65 : 60 }}
         style={{ touchAction: 'none' }}
@@ -92,6 +95,9 @@ const LegendsGame: React.FC = () => {
         </Suspense>
       </Canvas>
 
+      {/* Vignette effect — cinematic edge darkening */}
+      <div className="game-vignette" />
+
       {/* UI Overlay */}
       <div className="game-overlay">
 
@@ -101,18 +107,22 @@ const LegendsGame: React.FC = () => {
             <h1 className="game-title">
               Legends <span className="game-title-amp">&</span> Lovers
             </h1>
-            <p className="game-score">SCORE: {score.toString().padStart(6, '0')}</p>
+            <div className="game-score-wrapper">
+              <p className="game-score">
+                SCORE <span className="game-score-value">{paddedScore}</span>
+              </p>
+            </div>
           </div>
 
           <button
             onClick={() => setPhase(phase === 'legend' ? 'lover' : 'legend')}
             className="game-phase-btn"
           >
-            {isMobile ? phase.toUpperCase() : `Switch Mood: ${phase}`}
+            {isMobile ? phaseLabel : `MOOD · ${phaseLabel}`}
           </button>
         </div>
 
-        {/* Start Screen — tappable */}
+        {/* Start Screen */}
         {!isPlaying && !gameOver && (
           <div
             className="game-start-screen"
@@ -134,7 +144,7 @@ const LegendsGame: React.FC = () => {
         {gameOver && (
           <div className="game-over-screen">
             <h2 className="game-over-title">GAME OVER</h2>
-            <p className="game-over-score">SCORE: {score}</p>
+            <p className="game-over-score">SCORE: {paddedScore}</p>
             <button
               onClick={handleRetryTap}
               className="game-retry-btn"
@@ -144,7 +154,7 @@ const LegendsGame: React.FC = () => {
           </div>
         )}
 
-        {/* Premiere — compact on mobile */}
+        {/* Premiere Controls */}
         <div className="game-premiere-controls">
           {isPremierePlaying && !isMobile ? (
             <div className="game-premiere-info">
@@ -168,7 +178,7 @@ const LegendsGame: React.FC = () => {
         </div>
       </div>
 
-      {/* CRT Scanline Effect — skip on mobile for performance */}
+      {/* CRT Effects */}
       <div className="game-noise" />
       {!isMobile && <div className="game-scanlines" />}
     </div>
