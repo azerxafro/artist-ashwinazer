@@ -154,22 +154,36 @@ const LegendsGame: React.FC = () => {
           </div>
         )}
 
-        {/* Premiere Controls */}
-        <div className="game-premiere-controls">
-          {isPremierePlaying && !isMobile ? (
-            <div className="game-premiere-info">
-              <p className="game-premiere-label">EXCLUSIVE PREMIERE</p>
-              <h2 className="game-premiere-title">THAPPU PANNITEN</h2>
-            </div>
-          ) : null}
-
-          <button
-            onClick={(e) => { e.stopPropagation(); togglePremiere(); }}
-            onTouchEnd={(e) => { e.stopPropagation(); }}
-            className={`game-premiere-btn ${isPremierePlaying ? 'active' : ''}`}
-          >
-            {isPremierePlaying ? '⏸ PAUSE' : '🎵 EXCLUSIVE'}
-          </button>
+        {/* Premiere Controls - Corner Card */}
+        <div 
+          className="game-premiere-controls"
+          onClick={(e) => { e.stopPropagation(); togglePremiere(); }}
+          onTouchEnd={(e) => { e.stopPropagation(); }}
+        >
+           <div className="game-premiere-track-card">
+              <img 
+                src="images/artwork-thappu-panniten.jpeg" 
+                alt="Thappu Panniten" 
+                className="game-premiere-art"
+              />
+              <div className="game-premiere-text-group">
+                <p className="game-premiere-label">EXCLUSIVE PREMIERE</p>
+                <div className="game-premiere-scroller">
+                  <h2 className="game-premiere-title">
+                    Listening to unreleased track <span>Thappu Panniten</span> from <span className="game-album-name">Legends & Lovers</span>
+                  </h2>
+                </div>
+                 <div className={`game-premiere-status ${isPremierePlaying ? 'playing' : ''}`}>
+                    {isPremierePlaying ? (
+                       <>
+                         <span className="equalizer-bar"></span>
+                         <span className="equalizer-bar"></span>
+                         <span className="equalizer-bar"></span>
+                       </>
+                    ) : '▶ PLAY PREMIERE'}
+                 </div>
+              </div>
+           </div>
         </div>
 
         {/* Footer */}

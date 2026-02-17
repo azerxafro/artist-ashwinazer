@@ -188,14 +188,28 @@ const Player: React.FC = () => {
           position={[0, -0.3, 3 + i * SEGMENT_SPACING]}
         >
           {i === 0 ? (
-            <capsuleGeometry args={[SEGMENT_RADIUS * 1.2, SEGMENT_RADIUS * 0.8, 6, 12]} />
+            <icosahedronGeometry args={[SEGMENT_RADIUS * 1.3, 0]} />
           ) : (
-            <sphereGeometry args={[SEGMENT_RADIUS * (1 - i * 0.08), 12, 12]} />
+            <icosahedronGeometry args={[SEGMENT_RADIUS * (1 - i * 0.08), 0]} />
           )}
           {i === 0 ? (
-            <primitive object={headMaterial} attach="material" />
+            <meshStandardMaterial
+              color={headMaterial.color}
+              emissive={headMaterial.emissive}
+              emissiveIntensity={0.8}
+              roughness={0.2}
+              metalness={1}
+              wireframe={false}
+            />
           ) : (
-            <primitive object={bodyMaterial} attach="material" />
+            <meshStandardMaterial
+              color={bodyMaterial.color}
+              emissive={bodyMaterial.emissive}
+              emissiveIntensity={0.4}
+              roughness={0.3}
+              metalness={0.8}
+              wireframe
+            />
           )}
         </mesh>
       ))}
