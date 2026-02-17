@@ -72,3 +72,10 @@ export function sfxStart() {
   playTone(660, 0.08, 'sine', 0.10);
   setTimeout(() => playTone(880, 0.12, 'sine', 0.12), 80);
 }
+
+/** Cinematic Splash Sound — "Boom" on entry */
+export function sfxSplash() {
+  playTone(55, 1.5, 'sine', 0.5);
+  setTimeout(() => playTone(110, 0.8, 'triangle', 0.2), 100);
+  setTimeout(() => playTone(440, 2.0, 'sine', 0.05), 200);
+}

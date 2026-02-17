@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { Stars } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import { useGameStore } from '../components/game/store';
+import { sfxSplash } from '../components/game/sfx';
 import AudioManager from '../components/game/AudioManager';
 import World from '../components/game/World';
 import Player from '../components/game/Player';
@@ -50,6 +51,33 @@ const LegendsGame: React.FC = () => {
     check();
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
+  }, []);
+
+  // Splash Screen Logic
+  const [showSplash, setShowSplash] = useState(true);
+  const [splashFading, setSplashFading] = useState(false);
+
+  useEffect(() => {
+    // Play splash sound
+    const timer = setTimeout(() => {
+        sfxSplash();
+    }, 500);
+
+    // Fade out after 3.5s
+    const fadeTimer = setTimeout(() => {
+        setSplashFading(true);
+    }, 3500);
+
+    // Remove from DOM after 4.5s
+    const removeTimer = setTimeout(() => {
+        setShowSplash(false);
+    }, 4500);
+
+    return () => {
+        clearTimeout(timer);
+        clearTimeout(fadeTimer);
+        clearTimeout(removeTimer);
+    }
   }, []);
 
   // Space-to-start is handled by Player.tsx (with SFX)
@@ -100,6 +128,18 @@ const LegendsGame: React.FC = () => {
 
       {/* UI Overlay */}
       <div className="game-overlay">
+
+        {/* Cinematic Splash Screen */}
+        {showSplash && (
+            <div className={`game-splash ${splashFading ? 'fading' : ''}`}>
+                <div className="game-splash-content">
+                    <h1 className="game-splash-title">LEGENDS <span className="amp">&</span> LOVERS</h1>
+                    <div className="game-splash-line"></div>
+                    <p className="game-splash-text">EXCLUSIVE PREMIERE</p>
+                    <p className="game-splash-sub">UNRELEASED TRACK</p>
+                </div>
+            </div>
+        )}
 
         {/* Header */}
         <div className="game-header">

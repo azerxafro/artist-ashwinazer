@@ -534,15 +534,16 @@
 }
 
 .game-exit-link {
-  font-family: 'Syne', sans-serif;
-  font-size: 9px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.25);
-  letter-spacing: 0.2em;
-  text-decoration: none;
-  transition: all 0.3s;
-  padding: 0.5rem 1rem;
   display: inline-block;
+  margin-top: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease;
+  pointer-events: auto;
+  position: relative;
+  z-index: 20; /* Ensure it's above other elements */
 }
 
 @media (min-width: 768px) {
@@ -627,4 +628,82 @@
   50% {
     opacity: 0.5;
   }
+}
+
+/* ── Cinematic Splash Screen ── */
+.game-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: opacity 1s ease-out;
+}
+
+.game-splash.fading {
+  opacity: 0;
+}
+
+.game-splash-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.game-splash-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+  opacity: 0;
+  animation: splashFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+}
+
+.game-splash-title .amp {
+  color: #ff0055;
+  font-style: italic;
+}
+
+.game-splash-line {
+  width: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.3);
+  animation: splashExpand 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
+}
+
+.game-splash-text {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.875rem;
+  letter-spacing: 0.3em;
+  color: #ff0055;
+  text-transform: uppercase;
+  font-weight: 700;
+  opacity: 0;
+  animation: splashFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
+}
+
+.game-splash-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  opacity: 0;
+  animation: splashFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 1.5s forwards;
+}
+
+@keyframes splashFadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes splashExpand {
+  from { width: 0; }
+  to { width: 120px; }
 }

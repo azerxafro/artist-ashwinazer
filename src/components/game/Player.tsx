@@ -13,6 +13,8 @@ const Player: React.FC = () => {
   const { lane, phase, isPlaying, gameOver, moveLeft, moveRight, startGame } = useGameStore();
   const groupRef = useRef<THREE.Group>(null);
   const segmentRefs = useRef<THREE.Mesh[]>([]);
+  const leftEyeRef = useRef<THREE.Mesh>(null);
+  const rightEyeRef = useRef<THREE.Mesh>(null);
   const positionHistory = useRef<{ x: number; y: number }[]>([]);
 
   // Initialize position history
@@ -108,6 +110,14 @@ const Player: React.FC = () => {
         mesh.position.y += Math.sin(state.clock.elapsedTime * 6 + i * 0.6) * 0.04;
       }
     });
+
+    // Update Eyes Position specifically (fix for lag)
+    if (leftEyeRef.current && rightEyeRef.current) {
+        const headPos = positionHistory.current[0];
+        // Head is moving, so we must manually update eyes to follow EXACTLY
+        leftEyeRef.current.position.set(headPos.x - 0.12, headPos.y + 0.15, 2.78);
+        rightEyeRef.current.position.set(headPos.x + 0.12, headPos.y + 0.15, 2.78);
+    }
   });
 
   // Keyboard input
@@ -234,21 +244,15 @@ const Player: React.FC = () => {
 
       {/* Eyes on the head - Dynamic following */}
       <mesh 
-        position={[
-            (positionHistory.current[0]?.x || 0) - 0.12, 
-            (positionHistory.current[0]?.y || -0.3) + 0.15, 
-            2.78
-        ]}
+        ref={leftEyeRef}
+        position={[-0.12, -0.15, 2.78]} // Initial position
       >
         <sphereGeometry args={[0.06, 8, 8]} />
         <meshStandardMaterial color="#fff" emissive="#fff" emissiveIntensity={0.8} />
       </mesh>
       <mesh 
-        position={[
-            (positionHistory.current[0]?.x || 0) + 0.12, 
-            (positionHistory.current[0]?.y || -0.3) + 0.15, 
-            2.78
-        ]}
+        ref={rightEyeRef}
+        position={[0.12, -0.15, 2.78]} // Initial position
       >
         <sphereGeometry args={[0.06, 8, 8]} />
         <meshStandardMaterial color="#fff" emissive="#fff" emissiveIntensity={0.8} />
