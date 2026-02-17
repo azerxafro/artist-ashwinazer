@@ -49,7 +49,25 @@ const Player: React.FC = () => {
     bodyMaterial.color.set(bodyColor);
     bodyMaterial.emissive.set(bodyColor);
     bodyMaterial.emissiveIntensity = 0.3;
+    bodyMaterial.emissiveIntensity = 0.3;
   }, [phase, headMaterial, bodyMaterial]);
+
+  // Reset position on game start
+  useEffect(() => {
+    if (isPlaying && !gameOver) {
+       // Reset history to center lane
+       positionHistory.current = Array.from({ length: SEGMENT_COUNT }, () => ({
+        x: 0,
+        y: -0.3,
+      }));
+      // Reset mesh positions immediately to prevent visual jump
+      segmentRefs.current.forEach((mesh, i) => {
+        if (mesh) {
+            mesh.position.set(0, -0.3, 3 + i * SEGMENT_SPACING);
+        }
+      });
+    }
+  }, [isPlaying, gameOver]);
 
   // Smooth movement + body trail
   useFrame((state, delta) => {
@@ -214,12 +232,24 @@ const Player: React.FC = () => {
         </mesh>
       ))}
 
-      {/* Eyes on the head */}
-      <mesh position={[-0.12, -0.15, 2.78]}>
+      {/* Eyes on the head - Dynamic following */}
+      <mesh 
+        position={[
+            (positionHistory.current[0]?.x || 0) - 0.12, 
+            (positionHistory.current[0]?.y || -0.3) + 0.15, 
+            2.78
+        ]}
+      >
         <sphereGeometry args={[0.06, 8, 8]} />
         <meshStandardMaterial color="#fff" emissive="#fff" emissiveIntensity={0.8} />
       </mesh>
-      <mesh position={[0.12, -0.15, 2.78]}>
+      <mesh 
+        position={[
+            (positionHistory.current[0]?.x || 0) + 0.12, 
+            (positionHistory.current[0]?.y || -0.3) + 0.15, 
+            2.78
+        ]}
+      >
         <sphereGeometry args={[0.06, 8, 8]} />
         <meshStandardMaterial color="#fff" emissive="#fff" emissiveIntensity={0.8} />
       </mesh>

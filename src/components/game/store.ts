@@ -42,7 +42,7 @@ export const useGameStore = create<GameState>((set) => ({
   togglePremiere: () => set((state) => ({ isPremierePlaying: !state.isPremierePlaying })),
   setPremiere: (playing) => set({ isPremierePlaying: playing }),
 
-  startGame: () => set({ isPlaying: true, gameOver: false, score: 0, speed: 10 }),
+  startGame: () => set({ isPlaying: true, gameOver: false, score: 0, speed: 10, lane: 1 }),
   endGame: () => set({ isPlaying: false, gameOver: true }),
   incrementScore: (amount) => set((state) => ({ score: state.score + amount })),
   setPhase: (phase) => set({ phase }),
