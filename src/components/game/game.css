@@ -524,7 +524,9 @@
   text-align: center;
   pointer-events: auto;
   /* Add ample padding so content isn't hidden behind the bottom music player on mobile */
-  padding-bottom: calc(env(safe-area-inset-bottom, 0) + 100px); 
+  /* Increased from 100px to 200px to strictly prevent overlap */
+  padding-bottom: calc(env(safe-area-inset-bottom, 0) + 200px);
+  width: 100%;
 }
 
 @media (min-width: 769px) {
