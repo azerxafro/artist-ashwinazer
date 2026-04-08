@@ -16,6 +16,19 @@ const MusicSection: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Load Bandsintown widget script
+  useEffect(() => {
+    const scriptId = 'bandsintown-widget-script';
+    if (!document.getElementById(scriptId)) {
+      const script = document.createElement('script');
+      script.id = scriptId;
+      script.src = 'https://widgetv3.bandsintown.com/main.min.js';
+      script.charset = 'utf-8';
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, []);
+
   return (
     <section id="music" className="py-16 md:py-28 px-4 md:px-6 relative overflow-hidden bg-[#050505]">
       {/* Spotlight glow */}
@@ -170,6 +183,89 @@ const MusicSection: React.FC = () => {
                 </svg>
                 FOLLOW ON SPOTIFY
               </a>
+            </motion.div>
+
+            {/* Bandsintown Tour Dates Widget */}
+            <motion.div
+              className="mt-10 md:mt-12 w-full max-w-3xl mx-auto rounded-xl overflow-hidden border border-white/5 bg-black/40 backdrop-blur-md shadow-2xl p-3 md:p-5"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+            >
+              <p className="text-[10px] tracking-[0.6em] text-center mb-4 md:mb-5" style={{ color: theme.primaryColor }}>UPCOMING SHOWS</p>
+              <a className="bit-widget-initializer"
+                data-artist-name="id_15567775"
+                data-background-color="transparent"
+                data-separator-color="rgba(255,255,255,0.05)"
+                data-text-color="rgba(255,255,255,0.8)"
+                data-font="sans-serif"
+                data-auto-style="true"
+                data-button-label-capitalization="uppercase"
+                data-header-capitalization="uppercase"
+                data-location-capitalization="uppercase"
+                data-venue-capitalization="uppercase"
+                data-local-dates-position="tab"
+                data-display-lineup="false"
+                data-display-start-time="false"
+                data-social-share-icon="false"
+                data-display-limit="all"
+                data-date-format="MMM. D, YYYY"
+                data-date-orientation="horizontal"
+                data-date-border-color="rgba(255,255,255,0.1)"
+                data-date-border-width="1px"
+                data-date-capitalization="capitalize"
+                data-date-border-radius="8px"
+                data-event-ticket-cta-size="small"
+                data-event-ticket-text="TICKETS"
+                data-event-ticket-icon="false"
+                data-event-ticket-cta-text-color="#000"
+                data-event-ticket-cta-bg-color="rgba(255,255,255,0.9)"
+                data-event-ticket-cta-border-color="transparent"
+                data-event-ticket-cta-border-width="0px"
+                data-event-ticket-cta-border-radius="4px"
+                data-sold-out-button-text-color="rgba(255,255,255,0.5)"
+                data-sold-out-button-background-color="rgba(255,255,255,0.05)"
+                data-sold-out-button-border-color="rgba(255,255,255,0.1)"
+                data-sold-out-button-clickable="true"
+                data-event-rsvp-position="left"
+                data-event-rsvp-cta-size="small"
+                data-event-rsvp-only-show-icon="false"
+                data-event-rsvp-text="RSVP"
+                data-event-rsvp-icon="false"
+                data-event-rsvp-cta-text-color="rgba(255,255,255,0.8)"
+                data-event-rsvp-cta-bg-color="transparent"
+                data-event-rsvp-cta-border-color="rgba(255,255,255,0.2)"
+                data-event-rsvp-cta-border-width="1px"
+                data-event-rsvp-cta-border-radius="4px"
+                data-follow-section-position="top"
+                data-follow-section-alignment="center"
+                data-follow-section-header-text="Get updates on new shows"
+                data-follow-section-cta-size="small"
+                data-follow-section-cta-text="FOLLOW"
+                data-follow-section-cta-icon="false"
+                data-follow-section-cta-text-color="#000"
+                data-follow-section-cta-bg-color="rgba(255,255,255,0.9)"
+                data-follow-section-cta-border-color="transparent"
+                data-follow-section-cta-border-width="0px"
+                data-follow-section-cta-border-radius="4px"
+                data-play-my-city-position="bottom"
+                data-play-my-city-alignment="center"
+                data-play-my-city-header-text="Don't see a show near you?"
+                data-play-my-city-cta-size="small"
+                data-play-my-city-cta-text="REQUEST A SHOW"
+                data-play-my-city-cta-icon="false"
+                data-play-my-city-cta-text-color="rgba(255,255,255,0.8)"
+                data-play-my-city-cta-bg-color="transparent"
+                data-play-my-city-cta-border-color="rgba(255,255,255,0.2)"
+                data-play-my-city-cta-border-width="1px"
+                data-play-my-city-cta-border-radius="4px"
+                data-language="en"
+                data-layout-breakpoint="900"
+                data-app-id="303ceb9b1b0c2180faa654774b413b1f"
+                data-bit-logo-position="bottomRight"
+                data-bit-logo-color="rgba(255,255,255,0.4)"
+              ></a>
             </motion.div>
           </motion.div>
         )}

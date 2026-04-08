@@ -128,3 +128,104 @@ iframe[src*="spotify"] {
   -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
   mask-image: linear-gradient(to right, black 85%, transparent 100%);
 }
+
+/* ──────────────────────────────────────────
+   Bandsintown Widget — Dark Theme Overrides
+   Compact, responsive, matching site UI
+   ────────────────────────────────────────── */
+
+/* Force transparent/dark backgrounds on all widget containers */
+.bit-widget,
+.bit-widget .bit-widget-container,
+.bit-widget .bit-top-track-container {
+  background: transparent !important;
+  font-family: inherit !important;
+}
+
+/* Compact event rows */
+.bit-widget .bit-event {
+  padding: 10px 0 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+.bit-widget .bit-event:last-child {
+  border-bottom: none !important;
+}
+
+/* Text color enforcement */
+.bit-widget .bit-event .bit-venue,
+.bit-widget .bit-event .bit-location,
+.bit-widget .bit-event .bit-date,
+.bit-widget .bit-event .bit-event-info,
+.bit-widget .bit-follow-section-header-text,
+.bit-widget .bit-play-my-city-header-text,
+.bit-widget .bit-no-dates-text,
+.bit-widget p,
+.bit-widget span,
+.bit-widget div {
+  color: rgba(255, 255, 255, 0.75) !important;
+  font-size: clamp(11px, 1.4vw, 14px) !important;
+  line-height: 1.4 !important;
+}
+
+/* CTA buttons — compact, subtle */
+.bit-widget .bit-button,
+.bit-widget .bit-rsvp-button,
+.bit-widget .bit-ticket-button,
+.bit-widget .bit-follow-button,
+.bit-widget .bit-play-my-city-button {
+  padding: 6px 14px !important;
+  font-size: 10px !important;
+  letter-spacing: 0.12em !important;
+  border-radius: 4px !important;
+  transition: all 0.3s ease !important;
+}
+
+/* Follow section — tighter */
+.bit-widget .bit-follow-section,
+.bit-widget .bit-play-my-city-section {
+  padding: 8px 0 !important;
+}
+
+/* Date badges — compact */
+.bit-widget .bit-date {
+  min-width: auto !important;
+  padding: 4px 8px !important;
+}
+
+/* Hide unnecessary whitespace / branding bloat */
+.bit-widget .bit-logo {
+  opacity: 0.3 !important;
+  transform: scale(0.75) !important;
+}
+
+/* ── Mobile: extra compact ── */
+@media (max-width: 640px) {
+  .bit-widget .bit-event {
+    padding: 8px 0 !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+  .bit-widget .bit-event .bit-venue,
+  .bit-widget .bit-event .bit-location,
+  .bit-widget .bit-event .bit-date,
+  .bit-widget p,
+  .bit-widget span,
+  .bit-widget div {
+    font-size: 11px !important;
+  }
+  .bit-widget .bit-button,
+  .bit-widget .bit-rsvp-button,
+  .bit-widget .bit-ticket-button {
+    padding: 5px 12px !important;
+    font-size: 9px !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+}
+
+/* ── Tablet ── */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .bit-widget .bit-event {
+    padding: 10px 0 !important;
+  }
+}
