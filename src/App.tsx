@@ -4,6 +4,7 @@ import LandingPage from './pages/LandingPage';
 
 // Lazy-load the game page to code-split heavy Three.js dependencies
 const LegendsGame = lazy(() => import('./pages/LegendsGame'));
+const SupportPage = lazy(() => import('./pages/SupportPage'));
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -24,6 +25,7 @@ const App: React.FC = () => {
         <Route path="/" element={<LandingPage />} />
         <Route path="/game" element={<LegendsGame />} />
         <Route path="/legends-and-lovers" element={<LegendsGame />} />
+        <Route path="/support" element={<SupportPage />} />
       </Routes>
     </Suspense>
   );

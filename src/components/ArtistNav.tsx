@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { artistData } from '../data/artistData';
 
 const navLinks = [
@@ -54,6 +55,13 @@ const ArtistNav: React.FC = () => {
                       style={{ backgroundColor: artistData.theme.primaryColor }} />
               </button>
             ))}
+            <Link
+              to="/support"
+              className="text-xs tracking-[0.2em] text-white/60 hover:text-[#D4AF37] transition-colors duration-300 relative group"
+            >
+              SUPPORT
+              <span className="absolute -bottom-1 left-0 w-0 h-px bg-[#D4AF37] group-hover:w-full transition-all duration-300" />
+            </Link>
             <a href={artistData.featuredAlbum.spotifyUrl}
                target="_blank" rel="noopener noreferrer"
                className="text-xs tracking-[0.2em] px-4 py-2 border rounded-full transition-all duration-300 hover:text-black"
@@ -103,6 +111,19 @@ const ArtistNav: React.FC = () => {
                 {link.label}
               </motion.button>
             ))}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <Link
+                to="/support"
+                onClick={() => setMenuOpen(false)}
+                className="text-2xl tracking-[0.3em] text-[#D4AF37]/80 hover:text-[#D4AF37]"
+              >
+                SUPPORT
+              </Link>
+            </motion.div>
             <motion.a
               href={artistData.featuredAlbum.spotifyUrl}
               target="_blank" rel="noopener noreferrer"
@@ -110,7 +131,7 @@ const ArtistNav: React.FC = () => {
               style={{ borderColor: artistData.theme.primaryColor, color: artistData.theme.primaryColor }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
+              transition={{ delay: 0.5 }}
             >
               STREAM NOW
             </motion.a>
